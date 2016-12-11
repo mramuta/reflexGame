@@ -9,18 +9,30 @@ $(function() {
   var time = new Date();
 
   document.addEventListener("mousemove", mouseMoveHandler, false);
+  document.addEventListener("mosedown", mouseClickHandler, false);
 
   function mouseMoveHandler(e) {
-      var relativeX = e.clientX - canvas.offsetLeft;
-      var relativeY = e.clientY - canvas.offsetTop;
-      if(relativeX > 0 && relativeX < canvas.width) {
-          posX = relativeX;
-      }
-      if(relativeY > 0 && relativeY < canvas.height) {
-          posY = relativeY;
-      }
+    var relativeX = e.clientX - canvas.offsetLeft;
+    var relativeY = e.clientY - canvas.offsetTop;
+    if(relativeX > 0 && relativeX < canvas.width) {
+        posX = relativeX;
+    }
+    if(relativeY > 0 && relativeY < canvas.height) {
+        posY = relativeY;
+    }
+  }
+  
+  function mouseClickHandler(e) {
+    
   }
 
+  function drawTarget() {
+    ctx.beginPath();
+    ctx.arc(x, y, targetRadius, 0, Math.PI*2);
+    ctx.fillStyle = "red";
+    ctx.fill();
+    ctx.closePath();
+  }
 
   function drawPointer() {
     ctx.beginPath();
@@ -31,12 +43,12 @@ $(function() {
 
   function drawGrid() {
     var spacing = 200;
-    var speed = 1.5;
+    var lineWidth = 2;
     for(i=-1; i<canvas.width/spacing; i++){
       ctx.beginPath();
-      ctx.rect(posX % spacing + i * spacing, 0, 1, canvas.height);
-      ctx.rect(0, posY % spacing + i * spacing, canvas.width, 1);
-      ctx.fillStyle = "lightgray";
+      ctx.rect(posX % spacing + i * spacing, 0, lineWidth, canvas.height);
+      ctx.rect(0, posY % spacing + i * spacing, canvas.width, lineWidth);
+      ctx.fillStyle = "black";
       ctx.fill();
       ctx.closePath();
     }
@@ -44,17 +56,17 @@ $(function() {
 
 
   function drawTimer() {
-      ctx.font = "16px Arial";
-      ctx.fillStyle = "black";
-      var seconds = parseInt(new Date() - time).toString().slice(0,-1);
-      ctx.fillText("Time: "+ seconds.slice(0,-2), canvas.width-100, 20);
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "black";
+    var seconds = parseInt(new Date() - time).toString().slice(0,-1);
+    ctx.fillText("Time: "+ seconds.slice(0,-2), canvas.width-100, 20);
   }
 
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawGrid();
     drawPointer();
     drawTimer();
-    drawGrid();
     requestAnimationFrame(draw);
   }
   draw();
