@@ -159,6 +159,7 @@ $(function() {
       }
     }
   }
+
   function missController(){
     if (miss){
       if (parseInt(new Date() - timer) < 500){
@@ -168,7 +169,6 @@ $(function() {
       }
     }
   }
-
 
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
