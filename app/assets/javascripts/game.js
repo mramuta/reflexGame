@@ -34,12 +34,12 @@ $(function() {
     var relativeX = e.clientX - canvas.offsetLeft;
     var relativeY = e.clientY - canvas.offsetTop;
     if(relativeX > 0 && relativeX < canvas.width) {
-        x -= posX - relativeX;
-        posX = relativeX;
+        x -= posX + relativeX;
+        posX = -relativeX;
     }
     if(relativeY > 0 && relativeY < canvas.height) {
-        y -= posY - relativeY;
-        posY = relativeY;
+        y -= posY + relativeY;
+        posY = -relativeY;
     }
   }
 
