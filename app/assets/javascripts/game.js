@@ -14,7 +14,9 @@ $(function() {
   var dx = Math.random() * speed;
   var dy = - Math.random() * speed;
   var hit = false;
+  var miss = false;
   var score = 0;
+  var timer = new Date()
 
 
   document.addEventListener("mousemove", mouseMoveHandler, false);
@@ -43,10 +45,28 @@ $(function() {
 
   function mouseClickHandler(e) {
     if (Math.abs(canvas.width/2 - x) < targetRadius && Math.abs(canvas.height/2 - y) < targetRadius){
-      console.log('NICE SHOT!')
+      hit = true;
+      timer = new Date()
       score += 1;
       targetStart();
+    }else{
+      timer = new Date()
+      miss = true;
     }
+  }
+
+  function drawHit() {
+    ctx.font = "50px Impact";
+    ctx.fillStyle = "white";
+    var seconds = parseInt(new Date() - time).toString().slice(0,-1);
+    ctx.fillText("NICE SHOT!", canvas.width/2, canvas.height/2);
+  }
+
+  function drawMiss() {
+    ctx.font = "50px Impact";
+    ctx.fillStyle = "white";
+    var seconds = parseInt(new Date() - time).toString().slice(0,-1);
+    ctx.fillText("YOU MISSED!", canvas.width/2, canvas.height/2);
   }
 
   function drawTarget() {
@@ -94,14 +114,14 @@ $(function() {
 
 
   function drawTimer() {
-    ctx.font = "16px Arial";
+    ctx.font = "18px Arial";
     ctx.fillStyle = "white";
     var seconds = parseInt(new Date() - time).toString().slice(0,-1);
     ctx.fillText("Time: "+ seconds.slice(0,-2), canvas.width-100, 20);
   }
 
   function drawScore() {
-    ctx.font = "16px Arial";
+    ctx.font = "18px Arial";
     ctx.fillStyle = "white";
     ctx.fillText("Score: "+ parseInt(score), 20, 20);
   }
@@ -130,6 +150,26 @@ $(function() {
     }
   }
 
+  function hitController(){
+    if (hit){
+      if (parseInt(new Date() - timer) < 500){
+        drawHit();
+      }else{
+        hit = false;
+      }
+    }
+  }
+  function missController(){
+    if (miss){
+      if (parseInt(new Date() - timer) < 500){
+        drawMiss();
+      }else{
+        miss = false;
+      }
+    }
+  }
+
+
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawGrid();
@@ -138,6 +178,9 @@ $(function() {
     drawTarget();
     drawPointer();
     targetController();
+    hitController();
+    missController();
+
     x += dx;
     y += dy;
     requestAnimationFrame(draw);
